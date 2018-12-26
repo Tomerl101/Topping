@@ -2,12 +2,108 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 // Uncomment lines 7 and 10 to view the visual layout at runtime.
 //import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
 void main() {
   //debugPaintSizeEnabled = true;
   runApp(MyApp());
+}
+
+class FavoriteWidget extends StatefulWidget {
+  @override
+  _FavoriteWidgetState createState() => _FavoriteWidgetState();
+}
+
+class _FavoriteWidgetState extends State<FavoriteWidget> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+
+  void _toggleFavorite() {
+    print("tomer");
+    setState(() {
+      // If the lake is currently favorited, unfavorite it.
+      if (_isFavorited) {
+        _favoriteCount -= 1;
+        _isFavorited = false;
+        // Otherwise, favorite it.
+      } else {
+        _favoriteCount += 1;
+        _isFavorited = true;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: EdgeInsets.all(0.0),
+          child: IconButton(
+            icon: (_isFavorited ? Icon(Icons.star) : Icon(Icons.star_border)),
+            color: Colors.red[500],
+            onPressed: _toggleFavorite,
+          ),
+        ),
+        SizedBox(
+          width: 18.0,
+          child: Container(
+            child: Text('$_favoriteCount'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class BtnShowDialog extends StatefulWidget {
+  @override
+  _BtnShowDialog createState() => _BtnShowDialog();
+}
+
+class _BtnShowDialog extends State<BtnShowDialog> {
+  void _onBtnPress() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Rewind and remember'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You will never be satisfied.'),
+                Text('You\’re like me. I’m never satisfied.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Regret'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      textColor: Colors.white,
+      color: Colors.red,
+      padding: const EdgeInsets.all(8.0),
+      child: new Text("CLICK ME"),
+      onPressed: _onBtnPress,
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -36,14 +132,11 @@ class MyApp extends StatelessWidget {
                     color: Colors.grey[500],
                   ),
                 ),
+                BtnShowDialog(),
               ],
             ),
           ),
-          Icon(
-            Icons.star_border,
-            color: Colors.red[700],
-          ),
-          Text('41'),
+          FavoriteWidget(),
         ],
       ),
     );
@@ -77,7 +170,7 @@ class MyApp extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.amber,
         borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
-    ),
+      ),
       margin: const EdgeInsets.all(12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -124,12 +217,11 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-
     Widget textSection = Container(
       decoration: BoxDecoration(
-      border: Border.all(width: 3.0, color: Colors.black38),
-      borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
-    ),
+        border: Border.all(width: 3.0, color: Colors.black38),
+        borderRadius: const BorderRadius.all(const Radius.circular(5.0)),
+      ),
       padding: const EdgeInsets.all(20.0),
       margin: const EdgeInsets.all(15.0),
       child: Text(
@@ -141,6 +233,14 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
     );
 
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'), // English
+        const Locale('he', 'IL'), // Hebrew
+      ],
       title: 'Flutter Demo',
       home: Scaffold(
         appBar: AppBar(
