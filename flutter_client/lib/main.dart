@@ -3,14 +3,51 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // Uncomment lines 7 and 10 to view the visual layout at runtime.
 //import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
-void main() {
-  //debugPaintSizeEnabled = true;
-  runApp(MyApp());
+Future<Post> fetchPost() async {
+  final response = await http.get('http://localhost:4040');
+
+  if (response.statusCode == 200) {
+    print("WORK!!!");
+    // If the call to the server was successful, parse the JSON
+    return Post.fromJson(json.decode(response.body));
+  } else {
+    print("ERORR!!!");
+    // If that call was not successful, throw an error.
+    throw Exception('Failed to load post');
+  }
 }
+
+class Post {
+  final int userId;
+  final int id;
+  final String title;
+  final String body;
+
+  Post({this.userId, this.id, this.title, this.body});
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+      body: json['body'],
+    );
+  }
+}
+
+// void main() {
+//   //debugPaintSizeEnabled = true;
+//   runApp(MyApp());
+// }
+
+void main() => runApp(MyApp(post: fetchPost()));
 
 class FavoriteWidget extends StatefulWidget {
   @override
@@ -107,6 +144,10 @@ class _BtnShowDialog extends State<BtnShowDialog> {
 }
 
 class MyApp extends StatelessWidget {
+  final Future<Post> post;
+
+  MyApp({Key key, this.post}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Widget titleSection = Container(
@@ -258,6 +299,21 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
             buttonSection,
             textSection,
             card,
+            Center(
+              child: FutureBuilder<Post>(
+                future: post,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data.title);
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+
+                  // By default, show a loading spinner
+                  return CircularProgressIndicator();
+                },
+              ),
+            ),
           ],
         ),
       ),

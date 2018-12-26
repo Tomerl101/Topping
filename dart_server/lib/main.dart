@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 //TODO:return header [Access-Control-Allow-Origin: *]!!!
 //enable credentials -> Access-Control-Allow-Credentials: true
@@ -26,8 +27,17 @@ Future main() async {
       '${server.port}');
 }
 
+//return json
 void handleGetRequest(HttpRequest request) {
+  print("REQUEST MADE");
+  var body = json.encode({
+    "userId": 1,
+    "id": 1,
+    "title": "lorem ipsum",
+    "body":
+        "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+  });
   request.response
-    ..write('User sent request ${request.method} from ${request.uri.path}')
+    ..write(body)
     ..close();
 }
