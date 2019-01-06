@@ -17,7 +17,8 @@ class Card extends StatelessWidget {
                 Container(
                     height: 210.0,
                     width: 160.0,
-                    child: Image.asset(imagePath, fit: BoxFit.cover))
+                    child: Image.asset(imagePath, 
+                          fit: BoxFit.cover))
               ],
             )));
   }

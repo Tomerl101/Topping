@@ -26,12 +26,32 @@ class ToppingsServerChannel extends ApplicationChannel {
   Controller get entryPoint {
     final router = Router();
 
+    router.route('/books[/:index]').linkFunction((Request incomingRequest) async {
+      final String reqMethod = incomingRequest.method;
+      final String index = incomingRequest.path.variables["index"];
+      if (reqMethod == 'GET') {
+        if(index != null) {
+          return Response.ok('Showing book by index: $index');
+        }
+        return Response.ok('Showing all books.');
+      } else if (reqMethod == 'POST') {
+        return Response.ok('POST Request.');
+      } else if (reqMethod == 'PUT') {
+        return Response.ok('PUT Request.');
+      } else if (reqMethod == 'DELETE') {
+        return Response.ok('DELETE Request.');
+      }
+      // If all else fails
+      return Response(405, null, 'Not sure what you\'re asking here');
+    });
+
     // Prefer to use `link` instead of `linkFunction`.
     // See: https://aqueduct.io/docs/http/request_controller/
     router.route("/example")
       .linkFunction((request) async {
         return Response.ok({"key": "value"});
       });
+      
     router.route('/lotan').linkFunction((request) async {
       return Response.ok('Doron tokea et lotan bathat!! ohh yehhh!!')
         ..contentType = ContentType.TEXT;
