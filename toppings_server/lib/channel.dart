@@ -28,12 +28,14 @@ class ToppingsServerChannel extends ApplicationChannel {
 
     // Prefer to use `link` instead of `linkFunction`.
     // See: https://aqueduct.io/docs/http/request_controller/
-    router
-      .route("/example")
+    router.route("/example")
       .linkFunction((request) async {
         return Response.ok({"key": "value"});
       });
-
+    router.route('/lotan').linkFunction((request) async {
+      return Response.ok('Doron tokea et lotan bathat!! ohh yehhh!!')
+        ..contentType = ContentType.TEXT;
+      });
     return router;
   }
 }

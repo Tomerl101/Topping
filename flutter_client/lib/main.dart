@@ -27,6 +27,7 @@ Future<Post> fetchPost() async {
 class Post {
   final int userId;
   final int id;
+  final int ig;
   final String title;
   final String body;
 
