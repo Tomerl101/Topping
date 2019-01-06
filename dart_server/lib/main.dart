@@ -33,7 +33,7 @@ void handleGetRequest(HttpRequest request) {
   var body = json.encode({
     "userId": 1,
     "id": 1,
-    "title": "lorem ipsum",
+    "title": "This is server answer",
     "body":
         "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
   });

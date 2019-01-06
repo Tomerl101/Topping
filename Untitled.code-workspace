@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "dart_server"
+		},
+		{
+			"path": "flutter_client"
+		}
+	]
+}
